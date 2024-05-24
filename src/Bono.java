@@ -3,6 +3,7 @@ package src;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,15 +15,13 @@ public class Bono {
 	
 	private static int[][] mapa;
 	
-	
+	private static int calles;
 	
 	public static void main(String[] args) {
-		String archivo ="";
-		mapa = crearGrafo(archivo);
-		mapa = new int[][]{{1,1,1,1},{1,1,1,0}};
+		mapa = crearGrafo();
 		
 		Estado estado = encontarPuntos();
-		System.out.print(estado.getIntercecciones().size()); 
+		System.out.print(estado.getIntercecciones()); 
     }
 
 	private static Estado encontarPuntos() {
@@ -30,7 +29,6 @@ public class Bono {
 		
 		ArrayList<Integer> losEstados = new ArrayList<Integer> ();
 		ArrayList<Boolean> lasCalles = new ArrayList<Boolean> ();
-		int calles = mapa[0].length;
 		int d = 0;
 		while (d < calles) {
 			lasCalles.add(false);
@@ -66,7 +64,6 @@ public class Bono {
 	}
 
 	private static boolean isSolution(Estado currentEstado) {
-		// TODO Auto-generated method stub
 		return currentEstado.isCorrecto() ;
 	}
 
@@ -84,31 +81,40 @@ public class Bono {
 		while (x < vertices) {
 			ArrayList<Integer> losEstados = (ArrayList<Integer>) currentNode.getIntercecciones().clone();
 			
-			ArrayList<Boolean> lasCalles2 = new ArrayList<Boolean> ();
+			boolean[] lasCalles2 = new boolean[calles];
+			if (losEstados.size()==3) {
+				int o = 0;
+			}
 			boolean acabe = true;
 			if (losEstados.contains(x)) {
+				x++;
 				continue;
 			}
 			losEstados.add(x);
 			int y = 0;
 			while(y < mapa[x].length) {
-				
-				if (mapa[x][y] == 1) {
-					lasCalles2.add(true);
+					lasCalles2[mapa[x][y]] = true;
+					;
+					y++;
 				}
-				else {
-					if (!lasCalles.get(y)) {
-						lasCalles2.add(false);
-						acabe = false;
-					}
-					else {
-						lasCalles2.add(true);
-					}
+		int l = 0;	
+		ArrayList<Boolean> elAreglo = new ArrayList<Boolean>();
+		while (l < lasCalles2.length){
+			if (lasCalles2[l]) {
+				elAreglo.add(true);
 				}
-				y++;
+			else if (lasCalles.get(l)) {
+				elAreglo.add(true);
+			}
+			else {
+				elAreglo.add(false);
+				acabe = false;
 			}
 			
-			Estado elEstado = new Estado(losEstados,lasCalles, acabe);
+			l++;
+		}
+			
+			Estado elEstado = new Estado(losEstados,elAreglo, acabe);
 			
 			estadosA.add(elEstado);
 			x++;
@@ -116,21 +122,21 @@ public class Bono {
 		return estadosA;
 	}
 
-	private static int[][] crearGrafo(String archivo) {
+	private static int[][] crearGrafo() {
 		// TODO Auto-generated method stub
-		try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+		try (InputStreamReader reader = new InputStreamReader(System.in); BufferedReader br = new BufferedReader(reader);) {
             String linea = br.readLine() ;
             String[] callesInt = linea.split(" ");
-            int calles = Integer.valueOf(callesInt[0]);
+            calles = Integer.valueOf(callesInt[0]);
             int inter = Integer.valueOf(callesInt[1]);
             int[][] mape = new int[inter][calles];
             int x = 0;
-            while ((linea = br.readLine()) != null) {
+            while (!(linea = br.readLine()).equals("")) {
             	String[] datos = linea.split(" ");
             	int[] callesE = new int[datos.length];
             	int y = 0;
             	while (y <callesE.length ) {
-            		callesE[y] = Integer.valueOf(datos[x]);
+            		callesE[y] = Integer.valueOf(datos[y]);
             		y ++;
             	}
             	mape[x]= callesE;

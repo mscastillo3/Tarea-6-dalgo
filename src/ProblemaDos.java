@@ -3,6 +3,7 @@ package src;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -40,15 +41,14 @@ public class ProblemaDos {
 		
 	}
 	public static void main(String[] args) {
-		String archivo ="";
-		crearGrafo(archivo);
+		crearGrafo();
 		
 		Boolean estado = pv();
 		System.out.print(estado); 
     }
-	private static void crearGrafo(String archivo) {
+	private static void crearGrafo() {
 		
-		 try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+		 try (InputStreamReader reader = new InputStreamReader(System.in); BufferedReader br = new BufferedReader(reader);) {
 	            String linea = br.readLine();
 	            dias = linea.split(" ");
 	            linea = br.readLine();
@@ -57,17 +57,18 @@ public class ProblemaDos {
 	            cota = Integer.valueOf(linea);
 	            linea = br.readLine();
 	            diasEsc = linea.split(" ");
-	            
+	            int y = 0;
 	            relaciones = new HashMap<String, int[]>();
-	            while ((linea = br.readLine()) != null) {
+	            while (!(linea = br.readLine()).equals("")) {
 	            	String[] datos = linea.split(" ");
-	            	int[] estudantesE = new int[datos.length-1];
+	            	int[] estudantesE = new int[datos.length];
 	            	int x = 0;
 	            	while (x <estudantesE.length ) {
-	            		estudantesE[x] = Integer.valueOf(datos[x+1]);
+	            		estudantesE[x] = Integer.valueOf(datos[x]);
 	            		x ++;
 	            	}
-	            	relaciones.put(datos[0], estudantesE);
+	            	relaciones.put(dias[y], estudantesE);
+	            	y++;
 	               
 	            }
 	        } catch (IOException e) {
