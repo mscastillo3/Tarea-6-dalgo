@@ -1,4 +1,5 @@
 ALGORITMO DE VERIFICACION PUNTO UNO:
+
 La primera linea son los nombres de todas las calles separadas por espacio.
 la segunda linea es la colucion que se quiere verificar.
 la tercera es el la cota minima que se quiere verificar.
